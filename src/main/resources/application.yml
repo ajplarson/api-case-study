@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: case-study
+  data:
+    mongodb:
+      uri: mongodb+srv://jelder666:<password>@cluster0.715gy.gcp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+
+management:
+  endpoint.health.show-details: never #default but calling out, can switch to when-authorized with security
+  endpoint.web.exposure.include: "info,health" #default but calling out
+
+
+---
+
+#local profile, could set up dummy security here
+
+spring:
+  profiles: local
+
+management:
+  endpoint.health.show-details: always
+  endpoint.web.exposure.include: "*"
