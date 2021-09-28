@@ -3,7 +3,8 @@ spring:
     name: case-study
   data:
     mongodb:
-      uri: mongodb+srv://jelder666:<password>@cluster0.715gy.gcp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+      uri: mongodb://127.0.0.1:27017
+      database: price
 
 management:
   endpoint.health.show-details: never #default but calling out, can switch to when-authorized with security
