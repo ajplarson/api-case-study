@@ -10,5 +10,4 @@ public interface PriceRepository extends MongoRepository<Price, Long> {
   public Optional<Price> findById(Long id);
 
   public Optional<List<Price>> findByValue(BigDecimal value);
-
 }
