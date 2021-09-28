@@ -1,0 +1,50 @@
+pipeline {
+    agent { docker { image 'openjdk:11' } } //sample java image
+    environment {
+        TZ = "UTC"
+    }
+    stages {
+        stage('configure') {
+            steps {
+                script {
+                    settings = readProperties file: "settings.gradle"
+                    env.ARTIFACT_NAME = "${settings['rootProject.name']}".trim()
+                }
+            }
+        }
+        stage('build') {
+            steps {
+                //assumes you updated the index to chmod 755 the wrapper
+                sh './gradlew build -x test -x verGJF'
+            }
+        }
+        stage('check format') {
+            steps {
+                sh './gradlew verGJF -x test'
+            }
+        }
+        stage('test') {
+            steps {
+                sh './gradlew test' //also runs jacoco
+            }
+        }
+        stage('static analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube Install') {
+                    sh "./gradlew -Dsonar.projectKey=${ARTIFACT_NAME} sonarqube"
+                }
+            }
+        }
+        stage('publish') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: "publish-id",
+                    usernameVariable: "USERNAME",
+                    passwordVariable: "PASSWORD"
+                )]) {
+                    sh "./gradlew publish"
+                }
+            }
+        }
+    } //end stages
+} //end pipeline

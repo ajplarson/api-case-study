@@ -1,0 +1,28 @@
+pipeline {
+    agent { docker { image 'openjdk:11' } } //sample java image
+    environment {
+        TZ = "UTC"
+    }
+    stages {
+        stage('get artifact') {
+            steps {
+                //http request to get artifact previously published
+            }
+        }
+        stage('deploy to dev') {
+            steps {
+                //deploy using a command line tool on the agent
+            }
+        }
+        stage('validate deployment') {
+            steps {
+                //run automated api tests at dev url
+            }
+        }
+        stage('dynamic analysis') {
+            steps {
+                //run owasp zap spider
+            }
+        }
+    } //end stages
+} //end pipeline
