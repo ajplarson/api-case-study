@@ -6,17 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class Product {
 
-    @Id
-    private Long id;
+  @Id private Long id;
 
-    private String name;
+  private String name;
 
-    private Price price;
+  private Price price;
 }

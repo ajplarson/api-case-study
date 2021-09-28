@@ -1,4 +1,3 @@
 package com.example.demo.service;
 
-public class PriceService {
-}
+public class PriceService {}

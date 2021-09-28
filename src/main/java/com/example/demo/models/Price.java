@@ -1,13 +1,12 @@
 package com.example.demo.models;
 
+import java.math.BigDecimal;
+import java.util.Currency;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-
-import java.math.BigDecimal;
-import java.util.Currency;
 
 @Data
 @AllArgsConstructor
@@ -15,10 +14,9 @@ import java.util.Currency;
 @Builder
 public class Price {
 
-    @Id
-    private Long id;
+  @Id private Long id;
 
-    private BigDecimal value;
+  private BigDecimal value;
 
-    private Currency currencyCode;
+  private Currency currencyCode;
 }
