@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 import com.example.demo.models.Price;
 import com.example.demo.models.Product;
-
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

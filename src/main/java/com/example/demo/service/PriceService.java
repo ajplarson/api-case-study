@@ -24,11 +24,11 @@ public class PriceService {
     return repo.findAll();
   }
 
-  public Optional<Price> getPriceById(Long id)  {
+  public Optional<Price> getPriceById(Long id) {
     return repo.findById(id);
   }
 
-  public Optional<Price> updatePriceById(Long id, BigDecimal desiredValue)  {
+  public Optional<Price> updatePriceById(Long id, BigDecimal desiredValue) {
     Optional<Price> originalPrice = repo.findById(id);
     if (originalPrice.isEmpty()) {
       return Optional.empty();

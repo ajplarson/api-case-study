@@ -5,7 +5,6 @@ import com.example.demo.models.PriceRequestObject;
 import com.example.demo.models.Product;
 import com.example.demo.service.ApiService;
 import com.example.demo.service.PriceService;
-
 import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.Optional;
@@ -31,13 +30,13 @@ public class ProductController {
   // Get the product (if possible) for a specified ID
   @GetMapping("/api/product/{productId}")
   public Product getProductById(@PathVariable(name = "productId") String productId) {
-      Optional<Product> product = apiService.populateProductObject(productId);
-      if (product.isPresent()) {
-        return product.get();
-      } else {
-        throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND, String.format("Product ID %s not found", productId));
-      }
+    Optional<Product> product = apiService.populateProductObject(productId);
+    if (product.isPresent()) {
+      return product.get();
+    } else {
+      throw new ResponseStatusException(
+          HttpStatus.NOT_FOUND, String.format("Product ID %s not found", productId));
+    }
   }
 
   // Update the product (if possible) for a specified ID
@@ -45,19 +44,23 @@ public class ProductController {
   public Product updateProductById(
       @PathVariable(name = "productId") String productId,
       @RequestBody PriceRequestObject requestedPrice) {
-      Optional<Product> product = apiService.populateProductObject(productId);
-      //if product is present then price has to be valid
-      if (product.isPresent()) {
-        Product updatedProduct = product.get();
-        Long requestedId = Long.valueOf(requestedPrice.getId());
-        BigDecimal requestedValue = BigDecimal.valueOf(Double.valueOf(requestedPrice.getValue()));
-        Price updatedPrice = priceService.updatePriceById(requestedId, requestedValue).get();
-        updatedProduct.setPrice(updatedPrice);
-        return updatedProduct;
-      } else {
+    Optional<Product> product = apiService.populateProductObject(productId);
+    // if product is present then price has to be valid
+    if (product.isPresent()) {
+      Product updatedProduct = product.get();
+      Long requestedId = Long.valueOf(requestedPrice.getId());
+      BigDecimal requestedValue = BigDecimal.valueOf(Double.valueOf(requestedPrice.getValue()));
+      Optional<Price> updatedPrice = priceService.updatePriceById(requestedId, requestedValue);
+      if (updatedPrice.isEmpty()) {
         throw new ResponseStatusException(
-            HttpStatus.NOT_FOUND, String.format("Product ID %s not found", productId));
+                HttpStatus.NOT_FOUND, String.format("Price not found for product ID %s", productId));
       }
+      updatedProduct.setPrice(updatedPrice.get());
+      return updatedProduct;
+    } else {
+      throw new ResponseStatusException(
+          HttpStatus.NOT_FOUND, String.format("Product ID %s not found", productId));
+    }
   }
 
   // Post the price so we don't have to populate the DB manually

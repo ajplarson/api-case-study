@@ -5,7 +5,6 @@ import static org.mockito.Mockito.when;
 
 import com.example.demo.models.Price;
 import com.example.demo.repos.PriceRepository;
-
 import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.Optional;
@@ -18,7 +17,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class PriceServiceTest {
-  //these are all pass through methods for the most part, but still want to make sure it works as expected
+  // these are all pass through methods for the most part, but still want to make sure it works as
+  // expected
 
   @MockBean private PriceRepository repo;
 
@@ -70,7 +70,7 @@ class PriceServiceTest {
     // given
     when(repo.findById(Mockito.any(Long.class))).thenReturn(Optional.empty());
 
-    //when
+    // when
     var price = priceService.getPriceById(Long.valueOf("123"));
 
     // then
@@ -107,7 +107,7 @@ class PriceServiceTest {
     // given
     when(repo.findById(Mockito.any(Long.class))).thenReturn(Optional.empty());
 
-    //when
+    // when
     var updatedPrice = priceService.updatePriceById(Long.valueOf("123"), BigDecimal.ONE);
 
     // then
