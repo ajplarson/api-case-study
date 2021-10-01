@@ -1,9 +1,9 @@
 package com.example.demo.service;
 
-import com.example.demo.utils.JsonParseException;
 import com.example.demo.utils.JsonUtils;
 import java.util.Optional;
 
+import com.google.gson.JsonParseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;

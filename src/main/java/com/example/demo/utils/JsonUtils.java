@@ -1,6 +1,8 @@
 package com.example.demo.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +18,14 @@ public class JsonUtils {
 
   public JsonObject parseStringToJsonObject(String rawJson) {
     return JsonParser.parseString(rawJson).getAsJsonObject();
+  }
+
+  public static String asJsonString(final Object obj) {
+    try {
+      return new ObjectMapper().writeValueAsString(obj);
+    } catch (Exception e) {
+      throw new JsonParseException(e);
+    }
   }
 
   public String getIdFromProductJson(JsonObject jsonObject) throws JsonParseException {
