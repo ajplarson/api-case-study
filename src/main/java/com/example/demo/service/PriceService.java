@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 import com.example.demo.models.Price;
 import com.example.demo.repos.PriceRepository;
-import com.example.demo.utils.InvalidQueryException;
 import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.List;
@@ -25,15 +24,14 @@ public class PriceService {
     return repo.findAll();
   }
 
-  public Price getPriceById(Long id) throws InvalidQueryException {
-    Optional<Price> price = repo.findById(id);
-    return price.orElseThrow(() -> new InvalidQueryException("Invalid ID"));
+  public Optional<Price> getPriceById(Long id)  {
+    return repo.findById(id);
   }
 
-  public Price updatePriceById(Long id, BigDecimal desiredValue) throws InvalidQueryException {
+  public Optional<Price> updatePriceById(Long id, BigDecimal desiredValue)  {
     Optional<Price> originalPrice = repo.findById(id);
     if (originalPrice.isEmpty()) {
-      throw new InvalidQueryException("Invalid ID");
+      return Optional.empty();
     }
     Price updatedPrice =
         Price.builder()
@@ -41,6 +39,6 @@ public class PriceService {
             .value(desiredValue)
             .currencyCode(originalPrice.get().getCurrencyCode())
             .build();
-    return repo.save(updatedPrice);
+    return Optional.of(repo.save(updatedPrice));
   }
 }

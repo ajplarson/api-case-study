@@ -5,7 +5,7 @@ import static org.mockito.Mockito.when;
 
 import com.example.demo.models.Price;
 import com.example.demo.repos.PriceRepository;
-import com.example.demo.utils.InvalidQueryException;
+
 import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.Optional;
@@ -18,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class PriceServiceTest {
+  //these are all pass through methods for the most part, but still want to make sure it works as expected
 
   @MockBean private PriceRepository repo;
 
@@ -45,7 +46,7 @@ class PriceServiceTest {
 
   @DisplayName("Test testFindPriceByIdHappy")
   @Test
-  void testFindPriceByIdHappy() throws InvalidQueryException {
+  void testFindPriceByIdHappy() {
     // given
     Long sampleId = Long.valueOf("123");
     BigDecimal sampleValue = BigDecimal.TEN;
@@ -55,7 +56,7 @@ class PriceServiceTest {
     when(repo.findById(Mockito.any(Long.class))).thenReturn(Optional.ofNullable(samplePrice));
 
     // when
-    var actualPrice = priceService.getPriceById(sampleId);
+    var actualPrice = priceService.getPriceById(sampleId).get();
 
     // then
     assertEquals(actualPrice.getId(), sampleId);
@@ -65,17 +66,20 @@ class PriceServiceTest {
 
   @DisplayName("Test testFindPriceByIdUnhappy")
   @Test
-  void testFindPriceByIdUnhappy() throws InvalidQueryException {
+  void testFindPriceByIdUnhappy() {
     // given
     when(repo.findById(Mockito.any(Long.class))).thenReturn(Optional.empty());
 
+    //when
+    var price = priceService.getPriceById(Long.valueOf("123"));
+
     // then
-    assertThrows(InvalidQueryException.class, () -> priceService.getPriceById(Long.valueOf("123")));
+    assertEquals(Optional.empty(), price);
   }
 
   @DisplayName("Test testUpdatePriceByIdHappy")
   @Test
-  void testUpdatePriceByIdHappy() throws InvalidQueryException {
+  void testUpdatePriceByIdHappy() {
     // given
     Long sampleId = Long.valueOf("123");
     BigDecimal sampleValue = BigDecimal.TEN;
@@ -89,7 +93,7 @@ class PriceServiceTest {
     when(repo.save(Mockito.any(Price.class))).thenReturn(sampleUpdatedPrice);
 
     // when
-    var updatedPrice = priceService.updatePriceById(sampleId, desiredValue);
+    var updatedPrice = priceService.updatePriceById(sampleId, desiredValue).get();
 
     // then
     assertEquals(updatedPrice.getId(), sampleId);
@@ -99,13 +103,14 @@ class PriceServiceTest {
 
   @DisplayName("Test testUpdatePriceByIdUnhappy")
   @Test
-  void testUpdatePriceByIdUnhappy() throws InvalidQueryException {
+  void testUpdatePriceByIdUnhappy() {
     // given
     when(repo.findById(Mockito.any(Long.class))).thenReturn(Optional.empty());
 
+    //when
+    var updatedPrice = priceService.updatePriceById(Long.valueOf("123"), BigDecimal.ONE);
+
     // then
-    assertThrows(
-        InvalidQueryException.class,
-        () -> priceService.updatePriceById(Long.valueOf("123"), BigDecimal.ONE));
+    assertEquals(Optional.empty(), updatedPrice);
   }
 }
